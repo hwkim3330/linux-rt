@@ -13,6 +13,7 @@ Ubuntu lowlatency kernel runtime profile for a dedicated RT core.
 ## Files
 - `scripts/rt-core-profile.sh`: apply/revert/status runtime tuning.
 - `scripts/run-cyclictest.sh`: run latency benchmark and save results.
+- `scripts/benchmark-all.sh`: run baseline + profiled tests and generate report.
 
 ## Quick start
 ```bash
@@ -27,6 +28,9 @@ sudo ./scripts/rt-core-profile.sh apply --rt-cpu 15
 
 # Run 30s latency test on RT cpu 15
 ./scripts/run-cyclictest.sh 30 15
+
+# Run baseline vs profiled in one shot and create report
+./scripts/benchmark-all.sh 30 15
 
 # Revert profile
 sudo ./scripts/rt-core-profile.sh revert
