@@ -49,7 +49,7 @@ run_case() {
   local output save_file stat_line min avg max
 
   output=$(./scripts/run-cyclictest.sh "$DURATION" "$RT_CPU" "$OUT_DIR")
-  echo "$output"
+  echo "$output" >&2
 
   save_file=$(echo "$output" | awk '/^Saved: /{print $2}' | tail -1)
   [[ -n "$save_file" && -f "$save_file" ]] || {
@@ -94,7 +94,7 @@ prof_avg=$(echo "$PROFILED" | awk -F, '{print $3}')
 prof_max=$(echo "$PROFILED" | awk -F, '{print $4}')
 prof_file=$(echo "$PROFILED" | awk -F, '{print $5}')
 
-all_best_max=$(awk -F, 'NR>1 && $8+0>0 {if(min=="" || $8+0<min) min=$8} END{print min+0}' "$CSV_FILE")
+all_best_max=$(awk -F, 'NR>1 && $9+0>0 {if(min=="" || $9+0<min) min=$9} END{if(min=="") print 0; else print min+0}' "$CSV_FILE")
 
 cat > "$REPORT_FILE" <<REPORT
 # RT Benchmark Report
