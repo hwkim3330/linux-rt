@@ -1,2 +1,4 @@
 results/
 *.log
+__pycache__/
+scripts/__pycache__/
