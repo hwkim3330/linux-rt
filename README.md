@@ -14,6 +14,9 @@ Ubuntu lowlatency kernel runtime profile for a dedicated RT core.
 - `scripts/rt-core-profile.sh`: apply/revert/status runtime tuning.
 - `scripts/run-cyclictest.sh`: run latency benchmark and save results.
 - `scripts/benchmark-all.sh`: run baseline + profiled tests and generate report.
+- `scripts/grub-rt-kargs.sh`: persist RT kernel args in GRUB (reboot required).
+- `scripts/irq-map-advanced.sh`: advanced IRQ mapping by action regex.
+- `scripts/plot-history.py`: generate SVG trend graph from benchmark history CSV.
 
 ## Quick start
 ```bash
@@ -32,11 +35,35 @@ sudo ./scripts/rt-core-profile.sh apply --rt-cpu 15
 # Run baseline vs profiled in one shot and create report
 ./scripts/benchmark-all.sh 30 15
 
+# Generate SVG graph from history CSV
+./scripts/plot-history.py
+
 # Revert profile
 sudo ./scripts/rt-core-profile.sh revert
 ```
 
+## Advanced
+```bash
+# Show current GRUB/default cmdline and RT state
+./scripts/grub-rt-kargs.sh status
+
+# Persist RT boot args (reboot required)
+sudo ./scripts/grub-rt-kargs.sh apply --rt-cpus 15
+
+# Revert GRUB boot args to backup
+sudo ./scripts/grub-rt-kargs.sh revert
+
+# Preview IRQ map changes without applying
+./scripts/irq-map-advanced.sh show --rt-pattern 'eth|enp|igc|ptp'
+sudo ./scripts/irq-map-advanced.sh apply --rt-cpus 15 --rt-pattern 'eth|enp|igc|ptp' --dry-run
+
+# Apply IRQ map and later restore
+sudo ./scripts/irq-map-advanced.sh apply --rt-cpus 15 --rt-pattern 'eth|enp|igc|ptp'
+sudo ./scripts/irq-map-advanced.sh restore
+```
+
 ## Notes
-- This is runtime-only tuning (no GRUB cmdline changes).
+- `rt-core-profile.sh` is runtime-only tuning (no reboot).
+- `grub-rt-kargs.sh` is persistent boot-time tuning (reboot required).
 - Recommended kernel: Ubuntu `lowlatency`.
 - If RT workload and noise still interfere, isolate more than one core.
