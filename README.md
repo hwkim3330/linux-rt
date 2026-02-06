@@ -17,6 +17,8 @@ Ubuntu lowlatency kernel runtime profile for a dedicated RT core.
 - `scripts/grub-rt-kargs.sh`: persist RT kernel args in GRUB (reboot required).
 - `scripts/irq-map-advanced.sh`: advanced IRQ mapping by action regex.
 - `scripts/plot-history.py`: generate SVG trend graph from benchmark history CSV.
+- `scripts/rtos-like-profile.sh`: aggressive runtime RT profile (single RT CPU island).
+- `scripts/run-rtos-like-validation.sh`: stress + cyclictest validation for RTOS-like profile.
 
 ## Quick start
 ```bash
@@ -60,6 +62,21 @@ sudo ./scripts/irq-map-advanced.sh apply --rt-cpus 15 --rt-pattern 'eth|enp|igc|
 # Apply IRQ map and later restore
 sudo ./scripts/irq-map-advanced.sh apply --rt-cpus 15 --rt-pattern 'eth|enp|igc|ptp'
 sudo ./scripts/irq-map-advanced.sh restore
+```
+
+## RTOS-Like Runtime Mode
+```bash
+# Check current runtime knobs
+./scripts/rtos-like-profile.sh status --rt-cpu 15
+
+# Apply aggressive runtime profile
+sudo ./scripts/rtos-like-profile.sh apply --rt-cpu 15
+
+# Validate under heavy non-RT load
+./scripts/run-rtos-like-validation.sh 30 15
+
+# Revert runtime profile
+sudo ./scripts/rtos-like-profile.sh revert
 ```
 
 ## Notes
